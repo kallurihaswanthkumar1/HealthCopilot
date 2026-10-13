@@ -1,0 +1,11 @@
+{
+  "name": "HealthCopilot",
+  "description": "AI - Powered Personal Health Copilot for secure medical record OCR, unified timeline, abnormal lab alerts, voice health agent, and family health management.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Authenticated user profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "name": { "type": "string", "maxLength": 128 },
+        "avatarUrl": { "type": "string", "maxLength": 512 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "email", "name"]
+    },
+    "FamilyProfile": {
+      "title": "FamilyProfile",
+      "description": "Family member health profile under a user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 128 },
+        "relationship": { "type": "string", "enum": ["Self", "Father", "Mother", "Spouse", "Child", "Other"] },
+        "age": { "type": "number" },
+        "gender": { "type": "string", "enum": ["Male", "Female", "Other"] },
+        "bloodGroup": { "type": "string", "maxLength": 10 },
+        "abhaId": { "type": "string", "maxLength": 64 },
+        "abhaLinked": { "type": "boolean" },
+        "allergies": { "type": "array" },
+        "chronicConditions": { "type": "array" },
+        "heightCm": { "type": "number" },
+        "weightKg": { "type": "number" },
+        "emergencyContactName": { "type": "string", "maxLength": 128 },
+        "emergencyContactRelation": { "type": "string", "maxLength": 64 },
+        "emergencyContactPhone": { "type": "string", "maxLength": 32 },
+        "phone": { "type": "string", "maxLength": 32 },
+        "primaryDoctorPhone": { "type": "string", "maxLength": 32 },
+        "hospitalPreference": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "userId", "name", "relationship"]
+    },
+    "MedicalDocument": {
+      "title": "MedicalDocument",
+      "description": "Medical record, prescription, or lab report with OCR data",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "profileId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 256 },
+        "type": { "type": "string", "enum": ["Prescription", "Lab Report", "Discharge Summary", "Diagnostic Report", "Other"] },
+        "date": { "type": "string", "maxLength": 32 },
+        "doctorName": { "type": "string", "maxLength": 128 },
+        "clinicHospital": { "type": "string", "maxLength": 128 },
+        "fileName": { "type": "string", "maxLength": 256 },
+        "fileType": { "type": "string", "maxLength": 64 },
+        "isHandwritten": { "type": "boolean" },
+        "summaryEnglish": { "type": "string", "maxLength": 10000 },
+        "summaryHindi": { "type": "string", "maxLength": 10000 },
+        "abnormalHighlights": { "type": "array" },
+        "diagnoses": { "type": "array" },
+        "medications": { "type": "array" },
+        "labValues": { "type": "array" },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "userId", "profileId", "title", "type", "date"]
+    },
+    "MedicineReminder": {
+      "title": "MedicineReminder",
+      "description": "Medicine reminder and daily adherence log",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "profileId": { "type": "string", "maxLength": 128 },
+        "medicationName": { "type": "string", "maxLength": 128 },
+        "dosage": { "type": "string", "maxLength": 64 },
+        "times": { "type": "array" },
+        "instructions": { "type": "string", "maxLength": 256 },
+        "takenToday": { "type": "array" },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "profileId", "medicationName", "times"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "User" },
+      "description": "User account document"
+    },
+    "/users/{userId}/profiles/{profileId}": {
+      "schema": { "$ref": "FamilyProfile" },
+      "description": "Family members for this user"
+    },
+    "/users/{userId}/profiles/{profileId}/documents/{documentId}": {
+      "schema": { "$ref": "MedicalDocument" },
+      "description": "Clinical documents and OCR records"
+    },
+    "/users/{userId}/profiles/{profileId}/reminders/{reminderId}": {
+      "schema": { "$ref": "MedicineReminder" },
+      "description": "Medicine reminders for the profile"
+    }
+  }
+}
